@@ -1,0 +1,156 @@
+mysql> CREATE TABLE Student_info;
+ERROR 1046 (3D000): No database selected
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| book_store_db      |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+7 rows in set (0.17 sec)
+
+mysql> use book_store_db;
+Database changed
+mysql> show tables;
++-------------------------+
+| Tables_in_book_store_db |
++-------------------------+
+| address                 |
+| book_table              |
+| books                   |
+| cart                    |
+| cart_table              |
+| hibernate_sequence      |
+| order_table             |
+| orders                  |
+| user_registration_table |
+| userregistration        |
++-------------------------+
+10 rows in set (0.02 sec)
+
+mysql> create database basic_sql;
+Query OK, 1 row affected (0.03 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| basic_sql          |
+| book_store_db      |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+8 rows in set (0.00 sec)
+
+mysql> use basic_sql;
+Database changed
+mysql>  create table employee_payroll (id int not null auto_increment, name varchar(100) not null, salary double not null, start date not null, primary key(id));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> desc employee_payroll;
++--------+--------------+------+-----+---------+----------------+
+| Field  | Type         | Null | Key | Default | Extra          |
++--------+--------------+------+-----+---------+----------------+
+| id     | int          | NO   | PRI | NULL    | auto_increment |
+| name   | varchar(100) | NO   |     | NULL    |                |
+| salary | double       | NO   |     | NULL    |                |
+| start  | date         | NO   |     | NULL    |                |
++--------+--------------+------+-----+---------+----------------+
+4 rows in set (0.02 sec)
+
+mysql> Insert into employee_payroll (name, salary, start) values ('ABC', '1000','2022-2-2');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> Insert into employee_payroll (name, salary, start) values ('DEF', '2000','2022-5-5');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> Insert into employee_payroll (name, salary, start) values ('GHI', '3000','2022-6-6');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employee_payroll where Salary > 1000;
++----+------+--------+------------+
+| id | name | salary | start      |
++----+------+--------+------------+
+|  2 | DEF  |   2000 | 2022-05-05 |
+|  3 | GHI  |   3000 | 2022-06-06 |
++----+------+--------+------------+
+2 rows in set (0.01 sec)
+
+mysql> update employee_payroll SET salary = '1000' where ID = 1;
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> delete from employee_payroll where Salary = 3000;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employee_payroll;
++----+------+--------+------------+
+| id | name | salary | start      |
++----+------+--------+------------+
+|  1 | ABC  |   1000 | 2022-02-02 |
+|  2 | DEF  |   2000 | 2022-05-05 |
++----+------+--------+------------+
+2 rows in set (0.00 sec)
+
+// Having, orderby and groupby in SQL
+
+
+mysql>  create table employee (id int not null auto_increment, name varchar(100) not null, gender varchar(10) not null, salary double not null, Department varchar(100) not null, start date not null, primary key(id));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> INSERT INTO employee VALUES (1, 'Nithya', 'R', 5000, 'Engineering', '2022-2-2');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO employee VALUES (1, 'Vas', 'K', 8000, 'Teacher', '2022-5-5');
+ERROR 1062 (23000): Duplicate entry '1' for key 'employee.PRIMARY'
+mysql> INSERT INTO employee VALUES (2, 'Vas', 'K', 8000, 'Teacher', '2022-5-5');
+Query OK, 1 row affected (0.08 sec)
+
+mysql> INSERT INTO employee VALUES (3, 'Jona', 'J', 7000, 'IT', '2022-8-8');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select Department, sum(Salary) as Salary
+    -> FROM employee
+    -> GROUP BY department
+    -> Having SUM(Salary) > 7000;
++------------+--------+
+| Department | Salary |
++------------+--------+
+| Teacher    |   8000 |
++------------+--------+
+1 row in set (0.01 sec)
+
+mysql> SELECT * FROM employee ORDER BY EmployeeId DESC;
+ERROR 1054 (42S22): Unknown column 'EmployeeId' in 'order clause'
+mysql> SELECT * FROM employee ORDER BY id DESC;
++----+--------+--------+--------+-------------+------------+
+| id | name   | gender | salary | Department  | start      |
++----+--------+--------+--------+-------------+------------+
+|  3 | Jona   | J      |   7000 | IT          | 2022-08-08 |
+|  2 | Vas    | K      |   8000 | Teacher     | 2022-05-05 |
+|  1 | Nithya | R      |   5000 | Engineering | 2022-02-02 |
++----+--------+--------+--------+-------------+------------+
+3 rows in set (0.00 sec)
+
+mysql> CREATE INDEX index_Department ON employee (Department);
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee;
++----+--------+--------+--------+-------------+------------+
+| id | name   | gender | salary | Department  | start      |
++----+--------+--------+--------+-------------+------------+
+|  1 | Nithya | R      |   5000 | Engineering | 2022-02-02 |
+|  2 | Vas    | K      |   8000 | Teacher     | 2022-05-05 |
+|  3 | Jona   | J      |   7000 | IT          | 2022-08-08 |
++----+--------+--------+--------+-------------+------------+
+3 rows in set (0.00 sec)
